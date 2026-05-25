@@ -1,2 +1,5 @@
 FEATURES.md
 CONFIGS.md
+
+*.md
+!README.md
