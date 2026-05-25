@@ -68,7 +68,7 @@ func verificaSite(url Site, ch chan Site) {
 }
 
 func registraErros(url Site, statusCode int) {
-	arquivo, err := os.OpenFile("logserr.txt", os.O_APPEND | os.O_CREATE | os.O_WRONLY, 0644)
+	arquivo, err := os.Open("logserr.txt")
 
 	check(err)
 
@@ -78,9 +78,9 @@ func registraErros(url Site, statusCode int) {
 		}
 	}()
 
-	horario := time.Now().Format("2006-01-02 15:04:05")
+	timeNow := time.Now().Format("2006-01-02 15:04:05")
 
-	log := fmt.Sprintf("%s: Problema no site: %s | HTTP: %d\n", horario, url.URL, statusCode)
+	log := fmt.Sprintf("[%s]: %s | HTTP: %d\n", timeNow, url.URL, statusCode)
 	_, err = arquivo.WriteString(log)
 	check(err)
 }
