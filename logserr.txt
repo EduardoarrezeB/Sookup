@@ -1,0 +1,14 @@
+2026-05-25 14:20:39: Problema no site: https://google.com | HTTP: 403
+2026-05-25 14:20:39: Problema no site: https://stackoverflow.com | HTTP: 403
+2026-05-25 14:21:39: Problema no site: https://stackoverflow.com | HTTP: 403
+2026-05-25 14:21:39: Problema no site: https://google.com | HTTP: 403
+2026-05-25 15:09:47: Problema no site: https://google.com | HTTP: 403
+2026-05-25 15:09:47: Problema no site: https://stackoverflow.com | HTTP: 403
+2026-05-25 15:09:57: Problema no site: https://google.com | HTTP: 403
+2026-05-25 15:09:57: Problema no site: https://google.com | HTTP: 403
+2026-05-25 15:09:57: Problema no site: https://stackoverflow.com | HTTP: 403
+2026-05-25 15:09:57: Problema no site: https://stackoverflow.com | HTTP: 403
+2026-05-25 15:15:11: Problema no site: https://google.com | HTTP: 403
+2026-05-25 15:15:11: Problema no site: https://stackoverflow.com | HTTP: 403
+2026-05-25 15:15:41: Problema no site: https://google.com | HTTP: 403
+2026-05-25 15:15:41: Problema no site: https://stackoverflow.com | HTTP: 403
