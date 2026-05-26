@@ -100,6 +100,10 @@ func listaSites() []Site {
 	var sites []Site
 	leitor := bufio.NewScanner(arquivo)
 
+	if leitor.Err() != nil {
+		fmt.Println("Erro no leitor", leitor.Err().Error())
+	}
+
 	for leitor.Scan() {
 		linha := leitor.Text()
 
