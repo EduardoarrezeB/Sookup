@@ -31,7 +31,8 @@ func main() {
 				fmt.Println("Erro ", err.Error())
 			}
 
-			if respostaConvertida == 1 {
+			switch respostaConvertida {
+			case 1:
 				limpaTerminal()
 
     			sites := listaSites()
@@ -55,13 +56,13 @@ func main() {
 						verificaSite(site, ch)
 					} (site)
 				}
-			} else if respostaConvertida == 2 {
+			case 2:
 				limpaTerminal()
 				sites := listaSites()
 				for _, site := range sites {
 					fmt.Println(site)
 				}
-			} else if respostaConvertida == 3 {
+			case 3:
 				limpaTerminal()
 				fmt.Println("\nPara cadastrar novo site, digite [site],[intervalo]")
 				scannerSite := bufio.NewScanner(os.Stdin)
@@ -78,7 +79,7 @@ func main() {
 
 					cadastraSite("sitesMonitorados.txt", respostaArr)
 				}
-			} else {
+			default:
 				os.Exit(0)
 			}
 		}
