@@ -3,3 +3,4 @@ https://github.com,30
 https://stackoverflow.com,30
 https://golang.org,30
 https://gmail.com,20
+https://web.whatsapp.com,15

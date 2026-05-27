@@ -63,7 +63,7 @@ func main() {
 				}
 			} else if respostaConvertida == 3 {
 				limpaTerminal()
-				fmt.Println("Para cadastrar novo site, digite [site],[intervalo]")
+				fmt.Println("\nPara cadastrar novo site, digite [site],[intervalo]")
 				scannerSite := bufio.NewScanner(os.Stdin)
 
 				if scannerSite.Scan() {
@@ -190,7 +190,7 @@ func menu() {
 }
 
 func limpaTerminal() {
-	cmd := exec.Command("cmd", "cls")
+	cmd := exec.Command("cmd", "clear")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
