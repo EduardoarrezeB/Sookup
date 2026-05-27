@@ -6,9 +6,10 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
+	"strconv"
 	"strings"
 	"time"
-	"strconv"
 )
 
 type Site struct {
@@ -17,28 +18,70 @@ type Site struct {
 }
 
 func main() {
-	// Lista de sites para monitorar
-    sites := listaSites()
-
-	// Cria um channel que transporta as strings dos sites
-	ch := make(chan Site)
-
-	for _, site := range sites {
-		go verificaSite(site, ch)
-	}
-
-	// Continua monitorando
 	for {
-		// Espera receber um valor do channel criado
-		site := <-ch
+		menu()
 
-		// Espera 60 segundos antes de verificar novamente
-		go func(site Site) {
-			time.Sleep(time.Duration(site.Intervalo) * time.Second)
+		scanner := bufio.NewScanner(os.Stdin)
 
-			// Verifica novamente criando nova goroutine
-			verificaSite(site, ch)
-		} (site)
+		if scanner.Scan() {
+			resposta := strings.TrimSpace(scanner.Text())
+			respostaConvertida, err := strconv.Atoi(resposta)
+
+			if err != nil {
+				fmt.Println("Erro ", err.Error())
+			}
+
+			if respostaConvertida == 1 {
+				limpaTerminal()
+
+    			sites := listaSites()
+
+				// Cria um channel que transporta as strings dos sites
+				ch := make(chan Site)
+
+				for _, site := range sites {
+					go verificaSite(site, ch)
+				}
+
+				for {
+					// Espera receber um valor do channel criado
+					site := <-ch
+				
+					// Espera 60 segundos antes de verificar novamente
+					go func(site Site) {
+						time.Sleep(time.Duration(site.Intervalo) * time.Second)
+					
+						// Verifica novamente criando nova goroutine
+						verificaSite(site, ch)
+					} (site)
+				}
+			} else if respostaConvertida == 2 {
+				limpaTerminal()
+				sites := listaSites()
+				for _, site := range sites {
+					fmt.Println(site)
+				}
+			} else if respostaConvertida == 3 {
+				limpaTerminal()
+				fmt.Println("Para cadastrar novo site, digite [site],[intervalo]")
+				scannerSite := bufio.NewScanner(os.Stdin)
+
+				if scannerSite.Scan() {
+					resposta := strings.Split(strings.TrimSpace(scannerSite.Text()), ",")
+
+					if len(resposta) != 2 {
+						fmt.Println("Formato inválido.")
+						return
+					}
+
+					respostaArr := [2]string{resposta[0], resposta[1]}
+
+					cadastraSite("sitesMonitorados.txt", respostaArr)
+				}
+			} else {
+				os.Exit(0)
+			}
+		}
 	}
 }
 
@@ -51,7 +94,7 @@ func verificaSite(url Site, ch chan Site) {
 	resp, err := client.Get(url.URL)
 
 	if err != nil {
-		check(err)
+		registraErros(url, 0)
 
 		// Enviar o site de volta para o channel
 		return
@@ -68,7 +111,7 @@ func verificaSite(url Site, ch chan Site) {
 }
 
 func registraErros(url Site, statusCode int) {
-	arquivo, err := os.Open("logserr.txt")
+	arquivo, err := os.OpenFile("logserr.txt", os.O_APPEND | os.O_CREATE | os.O_WRONLY, 0644)
 
 	check(err)
 
@@ -121,4 +164,36 @@ func listaSites() []Site {
 	}
 
 	return sites
+}
+
+func cadastraSite(nomeArq string, conteudo [2]string) {
+	file, err := os.OpenFile(nomeArq, os.O_APPEND | os.O_CREATE | os.O_WRONLY, 0644)
+
+	if err != nil {
+		fmt.Println("Erro ao cadastrar site", err.Error())
+		return
+	}
+
+	defer file.Close()
+
+	dadoSite := conteudo[0]
+	dadoIntervalo := conteudo[1]
+
+	dadosConcatenados := dadoSite + "," + dadoIntervalo + "\n"
+
+	file.Write([]byte(dadosConcatenados))
+}
+
+func menu() {
+	fmt.Printf("Monitoramento - Sookup (Simple Lookup)\n")
+	fmt.Println("1 - Iniciar monitoramento\n2 - Listar sites monitorados\n3 - Cadastrar novo site\n0 - Sair")
+}
+
+func limpaTerminal() {
+	cmd := exec.Command("cmd", "cls")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	err := cmd.Run()
+	check(err)
 }
