@@ -10,3 +10,5 @@
 [2026-05-27 16:27:18]: https://google.com | HTTP: 403
 [2026-05-27 16:27:48]: https://stackoverflow.com | HTTP: 403
 [2026-05-27 16:27:48]: https://google.com | HTTP: 403
+[2026-05-29 10:36:56]: https://stackoverflow.com | HTTP: 403 | Latência: 108.0224ms
+[2026-05-29 10:36:56]: https://google.com | HTTP: 403 | Latência: 129.0345ms

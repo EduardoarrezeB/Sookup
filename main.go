@@ -92,10 +92,12 @@ func verificaSite(url Site, ch chan Site) {
 	} ()
 	// Faz requisição HTTP no site com timeout:
 	client := http.Client{Timeout: 10 * time.Second}
+	inicio := time.Now()
 	resp, err := client.Get(url.URL)
+	duracao := time.Since(inicio)
 
 	if err != nil {
-		registraErros(url, 0)
+		registraErros(url, 0, duracao)
 
 		// Enviar o site de volta para o channel
 		return
@@ -107,11 +109,11 @@ func verificaSite(url Site, ch chan Site) {
 	if resp.StatusCode == 200 {
 		fmt.Println("Site online: ", url.URL)
 	} else {
-		registraErros(url, resp.StatusCode)
+		registraErros(url, resp.StatusCode, duracao)
 	}
 }
 
-func registraErros(url Site, statusCode int) {
+func registraErros(url Site, statusCode int, latencia time.Duration) {
 	arquivo, err := os.OpenFile("logserr.txt", os.O_APPEND | os.O_CREATE | os.O_WRONLY, 0644)
 
 	check(err)
@@ -124,7 +126,7 @@ func registraErros(url Site, statusCode int) {
 
 	timeNow := time.Now().Format("2006-01-02 15:04:05")
 
-	log := fmt.Sprintf("[%s]: %s | HTTP: %d\n", timeNow, url.URL, statusCode)
+	log := fmt.Sprintf("[%s]: %s | HTTP: %d | Latency: %v\n", timeNow, url.URL, statusCode, latencia)
 	_, err = arquivo.WriteString(log)
 	check(err)
 }
